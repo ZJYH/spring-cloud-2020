@@ -1,0 +1,42 @@
+server:
+  port: 3344
+
+spring:
+  application:
+    name: cloud-config-center
+  cloud:
+    config:
+      server:
+        git:
+          skipSslValidation: true # 跳过ssl认证
+          #哪个地址的哪个仓库下的哪个分支里的文件
+          uri: https://github.com/ZJYH/springcloud-config.git #地址
+          search-paths:
+            - springcloud-config # 仓库
+      label: master # 分支
+  rabbitmq:
+    host: 10.96.141.22
+    port: 5672
+    username: admin
+    password: erpmQ#0805
+    connection-timeout: 10000
+    template:
+      mandatory: true
+    publisher-confirms: true
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka7001.com:7001/eureka
+
+## rabbitmq相关配置，暴露bus刷新配置的端点
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: 'bus-refresh'
+
+
+#配置完成一刷 curl -X POST "http://localhost:3344/actuator/bus-refresh
